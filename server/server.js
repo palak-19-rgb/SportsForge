@@ -18,9 +18,11 @@ app.use(express.json());                          // for parsing JSON if needed
 app.use(cors());
 
 
-app.listen(2004, function () {
-  console.log("✅ Server started at port: 2004");
+const PORT = process.env.PORT || 2004;
+app.listen(PORT, function () {
+  console.log("✅ Server started at port:", PORT);
 });
+
 
 
 
