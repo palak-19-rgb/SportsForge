@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="smmodule">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Finder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="smcontroller" ng-init="doFetchAll()">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4"> Tournament Finder</h2>
+
+        <!-- Search Filters -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Sports" ng-model="searchSports">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="City" ng-model="searchCity">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Age" ng-model="searchAge">
+            </div>
+        </div>
+        <div class="text-center mb-4">
+            <button class="btn btn-success" ng-click="filterData()">Find Now</button>
+        </div>
+
+        <!-- Cards View -->
+        <div class="row" ng-if="jsonArray.length > 0">
+            <div class="col-md-4 mb-4" ng-repeat="obj in jsonArray">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Entry {{$index + 1}}</h5>
+                        <p><strong>Sports:</strong> {{obj.sport}}</p>
+                        <p><strong>City:</strong> {{obj.city}}</p>
+                        <p><strong>Age Range:</strong> {{obj.minage}} - {{obj.maxage}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4" ng-if="jsonArray.length == 0">
+            <p>No records found.</p>
+        </div>
+    </div>
+
+    <!-- AngularJS Script -->
+    <script>
+        var module = angular.module("smmodule", []);
+        module.controller("smcontroller", function ($scope, $http) {
+            $scope.jsonArray = [];
+
+            $scope.doFetchAll = function () {
+                $http.get("/fetch-wanted-tournaments").then(
+                    function success(response) {
+                        $scope.jsonArray = response.data;
+                    },
+                    function error(response) {
+                        alert("Error: " + JSON.stringify(response.data));
+                    }
+                );
+            };
+
+            $scope.filterData = function () {
+                var url = "/fetch-filtered-tournaments?sport=" + encodeURIComponent($scope.searchSports || '') +
+                    "&city=" + encodeURIComponent($scope.searchCity || '') +
+                    "&age=" + encodeURIComponent($scope.searchAge || '');
+
+                $http.get(url).then(
+                    function success(response) {
+                        $scope.jsonArray = response.data;
+                    },
+                    function error(response) {
+                        alert("Error: " + JSON.stringify(response.data));
+                    }
+                );
+            };
+        });
+    </script>
+</body>
+
+</html>

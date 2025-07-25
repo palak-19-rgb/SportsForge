@@ -1,0 +1,59 @@
+<html lang="en">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <title>Tournaments</title>
+    <script>
+        var mymodule = angular.module("smmodule", []);
+        mymodule.controller("smcontroller", function ($scope, $http) {
+            $scope.jsonArray = [];
+            $scope.doFetchAll = function ()
+            {
+                var url = "/do-fetch-all-users";
+                $http.get(url).then(allgoodfx, somebadfx);
+
+
+                function allgoodfx(response) {
+                    $scope.jsonArray = response.data;
+                }
+                function somebadfx(response) {
+                    alert(JSON.stringify(response.data));
+                }
+            }
+            $scope.dodelete = function (texttitle) {
+                var url = "delete-one?smtile" + texttitle;
+                $http.get(url).then(allgoodfx, somebadfx);
+                function allgoodfx(response) {
+                    alert(response.data);
+                    $scope.doFetchAll();
+                }
+                function somebadfx(response) {
+                    alert(JSON.stringify(response.data));
+                }
+            }
+        })
+    </script>
+</head>
+
+<body ng-app="smmodule" ng-controller="smcontroller" ng-init="doFetchAll();" class="ng-scope">
+    <center>
+        <h2>All users</h2>
+        <table width="800" border="1" rules="all">
+            <tbody>
+              <tr>
+  <th>Sr No.</th>
+  <th>Email-ID</th>
+  <th>User-type</th>
+</tr>
+<tr ng-repeat="obj in jsonArray">
+  <td>{{$index + 1}}</td>
+  <td>{{obj.emailid}}</td>
+  <td>{{obj.usertype}}</td>
+</tr>
+
+
+            </tbody>
+        </table>
+    </center>
+</body>
+</html>

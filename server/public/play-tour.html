@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tournaments</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f3f4f7, #e0e7ff);
+      margin: 0;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #4a69bd;
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      padding: 5px 10px;
+      border: none;
+      background-color: #e74c3c;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #c0392b;
+    }
+  </style>
+
+  <script>
+    var mymodule = angular.module("smmodule", []);
+    mymodule.controller("smcontroller", function ($scope, $http) {
+      $scope.jsonArray = [];
+
+      $scope.doFetchAll = function () {
+        $http.get("/do-fetch-all-tours").then(
+          function (response) {
+            $scope.jsonArray = response.data;
+          },
+          function (error) {
+            alert("Error fetching data: " + JSON.stringify(error.data));
+          }
+        );
+      };
+
+      $scope.dodelete = function (texttitle) {
+        var url = "delete-one?smtile=" + encodeURIComponent(texttitle);
+        $http.get(url).then(
+          function (response) {
+            alert(response.data);
+            $scope.doFetchAll();
+          },
+          function (error) {
+            alert("Error deleting: " + JSON.stringify(error.data));
+          }
+        );
+      };
+    });
+  </script>
+</head>
+
+<body ng-app="smmodule" ng-controller="smcontroller" ng-init="doFetchAll();">
+  <h2>All Tournaments</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Event Title</th>
+        <th>Date of Tournament</th>
+        <th>City</th>
+        <th>Contact Number</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="obj in jsonArray">
+        <td>{{obj.title}}</td>
+        <td>{{obj.date}}</td>
+        <td>{{obj.city}}</td>
+        <td>{{obj.contact}}</td>
+        <td>
+          <button ng-click="dodelete(obj.title)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

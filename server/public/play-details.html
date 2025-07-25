@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sports Portal</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    video#bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .form-container {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.8); 
+      padding: 20px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    input[type="submit"] {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🔁 Background video -->
+  <video id="bgVideo" autoplay muted loop>
+    <source src="./20250725-0836-58.8484445.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="form-container">
+    <form id="orgForm" enctype="multipart/form-data" method="POST" action="/server-play-details-safe">
+      <h2 class="text-center">Player Details</h2>
+
+      <p>Email ID
+        <input type="text" name="textEmail" class="form-control" required>
+      </p>
+
+      <p>Upload Adhar Card<br>
+        <input type="file" name="adhaar" class="form-control">
+      </p>
+
+      <p>Upload certificate<br>
+        <input type="file" name="profilePic" class="form-control">
+      </p>
+
+      <p>Address
+        <input type="text" name="textadd" class="form-control" required>
+      </p>
+
+      <p>Which sport
+        <input type="text" name="textsport" class="form-control" required>
+      </p>
+
+      <p>Contact number
+        <input type="text" name="textcont" class="form-control">
+      </p>
+
+      <p>Any other information
+        <input type="text" name="textinfo" class="form-control">
+      </p>
+
+      <center>
+        <input type="submit" value="Signup Now/Send To Server">
+      </center>
+    </form>
+  </div>
+</body>
+</html>
